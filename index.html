@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adem Ziane Berroudja — Bug Bounty Hunter</title>
+  <meta name="description" content="Adem Ziane Berroudja (mrx_w_) is a bug bounty hunter and security researcher from Algeria. Top 2 all-time Algeria on Bugcrowd with 283+ vulnerabilities found.">
+  <meta name="keywords" content="bug bounty, security researcher, mrx_w_, Adem Ziane Berroudja, web security, Bugcrowd, HackerOne">
+  <meta name="author" content="Adem Ziane Berroudja">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://mrx-w.github.io/">
+
+  <meta property="og:title" content="Adem Ziane Berroudja — Bug Bounty Hunter">
+  <meta property="og:description" content="Top 2 all-time Algeria on Bugcrowd. 283+ vulnerabilities found. Open for employment.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mrx-w.github.io/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Adem Ziane Berroudja — Bug Bounty Hunter">
+  <meta name="twitter:description" content="Top 2 all-time Algeria on Bugcrowd. 283+ vulnerabilities found. Open for employment.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>M</text></svg>">
+
+  <style>
+    :root {
+      --bg: #0a0a0b;
+      --surface: #111113;
+      --border: #1e1e22;
+      --border-light: #26262b;
+      --text: #f4f4f6;
+      --text-secondary: #8e8e93;
+      --text-muted: #636368;
+      --accent: #ffffff;
+      --max-w: 1140px;
+      --gap: 20px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* ----------------------------------------------------------
+       NAV
+       ---------------------------------------------------------- */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 18px 0;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    .nav.scrolled {
+      background: rgba(10,10,11,.9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--text);
+      color: var(--bg) !important;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-weight: 600 !important;
+      font-size: 0.82rem !important;
+      transition: opacity 0.2s ease;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+    .nav-toggle {
+      display: none;
+      background: none; border: none;
+      color: var(--text);
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    /* ----------------------------------------------------------
+       HERO
+       ---------------------------------------------------------- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 0 80px;
+    }
+    .hero-content {
+      max-width: 780px;
+    }
+    .hero-greeting {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 24px;
+    }
+    .hero-name {
+      font-size: clamp(2.8rem, 6vw, 4.4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+    .hero-role {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: 620px;
+      margin-bottom: 36px;
+    }
+    .hero-role strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+    .hero-ctas {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--text);
+      color: var(--bg);
+    }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--border-light);
+      background: rgba(255,255,255,.03);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+    }
+    .btn-ghost:hover { color: var(--text); }
+
+    .hero-line {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin-top: 80px;
+    }
+
+    /* ----------------------------------------------------------
+       STATS ROW
+       ---------------------------------------------------------- */
+    .stats {
+      padding: 0 0 100px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .stats-grid .stat-cell {
+      background: var(--surface);
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ----------------------------------------------------------
+       SECTION HEADERS
+       ---------------------------------------------------------- */
+    section { padding: 100px 0; }
+    .section-tag {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .section-desc {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: 500px;
+      margin-bottom: 48px;
+    }
+
+    /* ----------------------------------------------------------
+       FEATURED RESEARCH (Write-ups Grid)
+       ---------------------------------------------------------- */
+    .research-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .research-card {
+      background: var(--surface);
+      padding: 36px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: background 0.25s ease;
+    }
+    .research-card:hover {
+      background: #151518;
+    }
+    .research-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .research-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: rgba(255,255,255,.04);
+    }
+    .research-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.4;
+    }
+    .research-excerpt {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      flex: 1;
+    }
+    .research-link {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s ease, gap 0.2s ease;
+    }
+    .research-link:hover {
+      color: var(--text);
+      gap: 10px;
+    }
+
+    /* ----------------------------------------------------------
+       EXPERIENCE / TIMELINE
+       ---------------------------------------------------------- */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .timeline-row {
+      background: var(--surface);
+      padding: 28px 30px;
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 30px;
+      align-items: start;
+      transition: background 0.25s ease;
+    }
+    .timeline-row:hover { background: #151518; }
+    .timeline-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .timeline-date {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+    .timeline org {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .timeline-role {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    .timeline-body h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .timeline-body p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ----------------------------------------------------------
+       SKILLS
+       ---------------------------------------------------------- */
+    .skills-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .skill-row {
+      background: var(--surface);
+      padding: 28px 30px;
+      transition: background 0.25s ease;
+    }
+    .skill-row:hover { background: #151518; }
+    .skill-row h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .skill-row p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ----------------------------------------------------------
+       PLATFORM LINKS
+       ---------------------------------------------------------- */
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .link-card {
+      background: var(--surface);
+      padding: 24px 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: background 0.25s ease;
+    }
+    .link-card:hover { background: #151518; }
+    .link-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      object-fit: contain;
+      padding: 6px;
+      flex-shrink: 0;
+    }
+    .link-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .link-info strong {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .link-info span {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .link-arrow {
+      margin-left: auto;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      transition: color 0.2s ease;
+      flex-shrink: 0;
+    }
+    .link-card:hover .link-arrow { color: var(--text); }
+
+    /* ----------------------------------------------------------
+       CONTACT
+       ---------------------------------------------------------- */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .contact-info {
+      background: var(--surface);
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 24px;
+    }
+    .contact-info h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .contact-info p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .contact-links a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      transition: color 0.2s ease;
+    }
+    .contact-links a:hover { color: var(--text); }
+    .contact-links a .cl-icon {
+      width: 18px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .contact-form {
+      background: var(--surface);
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .contact-form label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: border-color 0.2s ease;
+      resize: vertical;
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      outline: none;
+      border-color: var(--border-light);
+    }
+    .contact-form textarea { min-height: 120px; }
+    .contact-form button {
+      align-self: flex-start;
+    }
+
+    /* ----------------------------------------------------------
+       FOOTER
+       ---------------------------------------------------------- */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+      text-align: center;
+    }
+    .footer p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* ----------------------------------------------------------
+       ANIMATIONS
+       ---------------------------------------------------------- */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ----------------------------------------------------------
+       RESPONSIVE
+       ---------------------------------------------------------- */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0; right: 0;
+        background: rgba(10,10,11,.97);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        padding: 24px 28px;
+        gap: 16px;
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-toggle { display: block; }
+      .hero { min-height: auto; padding: 130px 0 60px; }
+      .hero-line { margin-top: 50px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .research-grid { grid-template-columns: 1fr; }
+      .timeline-row { grid-template-columns: 1fr; gap: 8px; }
+      .links-grid { grid-template-columns: repeat(2, 1fr); }
+      .contact-grid { grid-template-columns: 1fr; }
+      .skills-list { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .links-grid { grid-template-columns: 1fr; }
+      .container { padding: 0 18px; }
+      .hero-ctas { flex-direction: column; }
+      .hero-ctas .btn { justify-content: center; text-align: center; }
+      section { padding: 60px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="container">
+    <a href="#" class="nav-logo">mrx_w_</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">&#9776;</button>
+    <div class="nav-links" id="navLinks">
+      <a href="#work">Work</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact" class="nav-cta">Get in Touch</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content fade-in">
+      <p class="hero-greeting">Bug Bounty Hunter · 19 Years Old · Algeria</p>
+      <h1 class="hero-name">Adem Ziane<br>Berroudja</h1>
+      <p class="hero-role">
+        At 19, <strong>#2 all-time in Algeria</strong> on Bugcrowd. <strong>283+ vulnerabilities</strong> found at a <strong>97.59% accuracy</strong> rate — top 1% globally across all severity tiers. Over half my submissions are <strong>P1 and P2 criticals</strong>: the kind that prevent data breaches, account takeovers, and system compromises.<br><br>
+        Trusted across <strong>35 Hall of Fame programs</strong> — 20 of them private, invitation-only engagements with real companies shipping real products. I find <strong>genuine, high-impact vulnerabilities</strong> in production systems and report them with precision. Web apps, APIs, Android, CTF — same standard across everything. <strong>Open for employment.</strong><br><br>
+        <em>Alhamdulillah for everything.</em>
+      </p>
+      <div class="hero-ctas">
+        <a href="#work" class="btn btn-primary">View My Work</a>
+        <a href="https://bugcrowd.com/h/mrx_w_" target="_blank" rel="noopener" class="btn btn-outline">Bugcrowd Profile</a>
+        <a href="https://www.linkedin.com/in/adem-ziane-berroudja-499628253/?skipRedirect=true" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn</a>
+      </div>
+    </div>
+    <div class="hero-line"></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid fade-in">
+      <div class="stat-cell">
+        <div class="stat-value">#2</div>
+        <div class="stat-label">All-Time Algeria — Bugcrowd</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-value">283+</div>
+        <div class="stat-label">Vulnerabilities Found</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-value">50%+</div>
+        <div class="stat-label">P1 / P2 Critical Severity</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-value">97.6%</div>
+        <div class="stat-label">Submission Accuracy</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED RESEARCH -->
+<section id="work">
+  <div class="container">
+    <p class="section-tag fade-in">Featured Research</p>
+    <h2 class="section-title fade-in">Vulnerability Write-ups</h2>
+    <p class="section-desc fade-in">In-depth breakdowns of real vulnerabilities discovered and responsibly disclosed across private and public programs.</p>
+
+    <div class="research-grid fade-in">
+      <a href="https://medium.com/@mrx_w_/how-i-discovered-23-000-leaked-records-through-google-dorking-7894df815109" target="_blank" rel="noopener" class="research-card">
+        <div class="research-tags">
+          <span class="research-tag">OSINT</span>
+          <span class="research-tag">Data Leak</span>
+        </div>
+        <h3 class="research-title">23,000+ Leaked Records Discovered Through Google Dorking</h3>
+        <p class="research-excerpt">Advanced dorking techniques used to uncover a massive data exposure. Full methodology, responsible disclosure process, and key lessons for defenders.</p>
+        <span class="research-link">Read Article &rarr;</span>
+      </a>
+      <a href="https://medium.com/@mrx_w_/a-critical-idor-that-allowed-me-to-delete-any-user-account-3812722ba0ad" target="_blank" rel="noopener" class="research-card">
+        <div class="research-tags">
+          <span class="research-tag">IDOR</span>
+          <span class="research-tag">Critical</span>
+        </div>
+        <h3 class="research-title">Critical IDOR: Delete Any User Account</h3>
+        <p class="research-excerpt">An insecure direct object reference that allowed unauthorized deletion of any user account. Root cause analysis, impact assessment, and remediation.</p>
+        <span class="research-link">Read Article &rarr;</span>
+      </a>
+      <a href="https://medium.com/@mrx_w_/how-i-discovered-a-blind-sql-injection-in-a-private-program-7eebd77ad286" target="_blank" rel="noopener" class="research-card">
+        <div class="research-tags">
+          <span class="research-tag">SQL Injection</span>
+          <span class="research-tag">Blind</span>
+        </div>
+        <h3 class="research-title">Blind SQL Injection in a Private Bug Bounty Program</h3>
+        <p class="research-excerpt">Step-by-step methodology from recon to exploitation of a blind SQLi in a tightly-scoped private program. Tools, payloads, and exfiltration technique.</p>
+        <span class="research-link">Read Article &rarr;</span>
+      </a>
+      <a href="https://medium.com/@mrx_w_/how-i-was-able-to-find-my-first-3-bugs-in-bugcrowd-77a1b673ed90" target="_blank" rel="noopener" class="research-card">
+        <div class="research-tags">
+          <span class="research-tag">Bug Bounty</span>
+          <span class="research-tag">Beginner</span>
+        </div>
+        <h3 class="research-title">My First 3 Bugs on Bugcrowd</h3>
+        <p class="research-excerpt">From zero to first three accepted vulnerabilities. The mindset, approach, and practical techniques that worked — written for newcomers starting their journey.</p>
+        <span class="research-link">Read Article &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <p class="section-tag fade-in">Track Record</p>
+    <h2 class="section-title fade-in">Experience & Achievements</h2>
+    <p class="section-desc fade-in">A timeline of milestones across bug bounty platforms and security research.</p>
+
+    <div class="timeline fade-in">
+      <div class="timeline-row">
+        <div class="timeline-meta">
+          <span class="timeline-date">All-Time</span>
+          <span class="timeline-org">Bugcrowd</span>
+        </div>
+        <div class="timeline-body">
+          <h4>#2 Ranked Researcher — Algeria</h4>
+          <p>Second highest-ranked Algerian bug bounty hunter of all time. Ranked #402 globally with 1,607 points and 97.59% accuracy across 283 vulnerabilities.</p>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-meta">
+          <span class="timeline-date">All-Time</span>
+          <span class="timeline-org">Bugcrowd</span>
+        </div>
+        <div class="timeline-body">
+          <h4>Hall of Fame — 35 Programs</h4>
+          <p>Recognized across 35 Hall of Fame programs — 20 private and 15 public — for consistent high-quality vulnerability submissions at critical impact levels.</p>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-meta">
+          <span class="timeline-date">All-Time</span>
+          <span class="timeline-org">HackerOne</span>
+        </div>
+        <div class="timeline-body">
+          <h4>464 Reputation — 10 Vulnerabilities</h4>
+          <p>Active on HackerOne with 12 credits earned and consistent submission streak. Open for employment opportunities through the platform.</p>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-meta">
+          <span class="timeline-date">Ongoing</span>
+          <span class="timeline-org">Independent</span>
+        </div>
+        <div class="timeline-body">
+          <h4>Security Research & Content</h4>
+          <p>Published multiple technical write-ups on Medium covering OSINT, web security, API vulnerabilities, and bug bounty methodology. Active CTF competitor in web, machine, and OSINT categories.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <p class="section-tag fade-in">Expertise</p>
+    <h2 class="section-title fade-in">Skills & Focus</h2>
+    <p class="section-desc fade-in">Specialized areas of offensive security with hands-on experience across real production targets.</p>
+
+    <div class="skills-list fade-in">
+      <div class="skill-row">
+        <h4>Web Application Security</h4>
+        <p>XSS, SQL injection, CSRF, SSRF, RCE, IDOR, authentication bypass, business logic flaws, and chained exploit development.</p>
+      </div>
+      <div class="skill-row">
+        <h4>API Security Testing</h4>
+        <p>REST and GraphQL assessment, JWT manipulation, rate limiting bypass, mass assignment, and insecure endpoint discovery.</p>
+      </div>
+      <div class="skill-row">
+        <h4>Android Application Testing</h4>
+        <p>APK reverse engineering, insecure data storage analysis, intent-based attacks, WebView vulnerabilities, and client-side security review.</p>
+      </div>
+      <div class="skill-row">
+        <h4>Open-Source Intelligence (OSINT)</h4>
+        <p>Google dorking, passive reconnaissance, data leak discovery, open-source intelligence gathering, and footprinting.</p>
+      </div>
+      <div class="skill-row">
+        <h4>CTF Competitions</h4>
+        <p>Web exploitation, OSINT challenges, reverse engineering, and machine-based capture-the-flag across multiple platforms.</p>
+      </div>
+      <div class="skill-row">
+        <h4>Development & Scripting</h4>
+        <p>Front-end development, JavaScript, Python for exploit and tool development, and Bash scripting for automation and recon workflows.</p>
+      </div>
+      <div class="skill-row">
+        <h4>Code Review & Analysis</h4>
+        <p>Manual source code auditing across PHP, Python, and JavaScript to identify logic flaws, insecure implementations, and vulnerabilities that automated scanners miss.</p>
+      </div>
+      <div class="skill-row">
+        <h4>Technical Writing</h4>
+        <p>Vulnerability disclosure reports, methodology write-ups, and educational content for the security community on Medium.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORMS -->
+<section>
+  <div class="container">
+    <p class="section-tag fade-in">Platforms</p>
+    <h2 class="section-title fade-in">Where to Find Me</h2>
+    <p class="section-desc fade-in">Active across major bug bounty platforms, professional networks, and the security community.</p>
+
+    <div class="links-grid fade-in">
+      <a href="https://bugcrowd.com/h/mrx_w_" target="_blank" rel="noopener" class="link-card">
+        <img class="link-icon" src="https://logos.bugcrowdusercontent.com/logos/ef74/d1fa/62a5b64c/3809e0af42850a579f02c3434743e3ca_bugcrowd__1_.png" alt="Bugcrowd" loading="lazy">
+        <div class="link-info">
+          <strong>Bugcrowd</strong>
+          <span>#402 Global &middot; #2 Algeria</span>
+        </div>
+        <span class="link-arrow">&rarr;</span>
+      </a>
+      <a href="https://hackerone.com/mrx_w_" target="_blank" rel="noopener" class="link-card">
+        <img class="link-icon" src="https://assets.streamlinehq.com/image/private/w_240,h_240,ar_1/f_auto/v1/icons/development/hackerone-cm4i0rtqkppti4oso76m1p.png/hackerone-7ocgai7dez46geovj3w7p4.png?_a=DATAiZAAZAA0" alt="HackerOne" loading="lazy">
+        <div class="link-info">
+          <strong>HackerOne</strong>
+          <span>464 Rep &middot; Open for work</span>
+        </div>
+        <span class="link-arrow">&rarr;</span>
+      </a>
+      <a href="https://www.linkedin.com/in/adem-ziane-berroudja-499628253/?skipRedirect=true" target="_blank" rel="noopener" class="link-card">
+        <img class="link-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/LinkedIn_icon.svg/1280px-LinkedIn_icon.svg.png" alt="LinkedIn" loading="lazy">
+        <div class="link-info">
+          <strong>LinkedIn</strong>
+          <span>Professional network</span>
+        </div>
+        <span class="link-arrow">&rarr;</span>
+      </a>
+      <a href="https://medium.com/@mrx_w_" target="_blank" rel="noopener" class="link-card">
+        <img class="link-icon" src="https://cdn-icons-png.flaticon.com/512/3670/3670098.png" alt="Medium" loading="lazy">
+        <div class="link-info">
+          <strong>Medium</strong>
+          <span>Technical write-ups</span>
+        </div>
+        <span class="link-arrow">&rarr;</span>
+      </a>
+      <a href="https://x.com/MrxXb12" target="_blank" rel="noopener" class="link-card">
+        <span class="link-icon" style="display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;background:rgba(255,255,255,.04);border-radius:6px;">X</span>
+        <div class="link-info">
+          <strong>X</strong>
+          <span>Infosec community</span>
+        </div>
+        <span class="link-arrow">&rarr;</span>
+      </a>
+      <a href="https://linktr.ee/mrx_w_" target="_blank" rel="noopener" class="link-card">
+        <img class="link-icon" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNUl9p5O30Bq3OaoOiI5O_PmGRZjvbteT7mQ&s" alt="Linktree" loading="lazy">
+        <div class="link-info">
+          <strong>Linktree</strong>
+          <span>All links in one place</span>
+        </div>
+        <span class="link-arrow">&rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <p class="section-tag fade-in">Get in Touch</p>
+    <h2 class="section-title fade-in">Contact</h2>
+    <p class="section-desc fade-in">Available for full-time roles, freelance consulting, and responsible disclosure collaboration.</p>
+
+    <div class="contact-grid fade-in">
+      <div class="contact-info">
+        <h3>Let's work together.</h3>
+        <p>I'm open to security roles, consulting engagements, and collaboration with other researchers. If you're building a security team or need a dedicated bug bounty hunter, reach out.</p>
+        <div class="contact-links">
+          <a href="mailto:mrx_w_@bugcrowdninja.com">
+            <span class="cl-icon">@</span> mrx_w_@bugcrowdninja.com
+          </a>
+          <a href="https://www.linkedin.com/in/adem-ziane-berroudja-499628253/?skipRedirect=true" target="_blank" rel="noopener">
+            <span class="cl-icon">in</span> Connect on LinkedIn
+          </a>
+          <a href="https://bugcrowd.com/h/mrx_w_" target="_blank" rel="noopener">
+            <span class="cl-icon">BC</span> Bugcrowd Profile
+          </a>
+          <a href="https://hackerone.com/mrx_w_" target="_blank" rel="noopener">
+            <span class="cl-icon">H1</span> HackerOne Profile
+          </a>
+          <a href="https://linktr.ee/mrx_w_" target="_blank" rel="noopener">
+            <span class="cl-icon">&#8599;</span> All Links (Linktree)
+          </a>
+        </div>
+      </div>
+      <form class="contact-form" action="https://formspree.io/f/your-form-id" method="POST">
+        <div>
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Your name" required>
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required>
+        </div>
+        <div>
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Tell me about the opportunity..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2026 Adem Ziane Berroudja &mdash; mrx_w_ &nbsp;| &nbsp;Alhamdulillah for everything.</p>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Mobile nav toggle
+  document.getElementById('navToggle').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+  document.querySelectorAll('#navLinks a').forEach(link => {
+    link.addEventListener('click', () => {
+      document.getElementById('navLinks').classList.remove('open');
+    });
+  });
+
+  // Scroll fade-in animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
